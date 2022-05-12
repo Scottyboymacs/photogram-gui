@@ -14,7 +14,13 @@ class PhotoController < ActionController::Base
   end  
   
   def user_detail
+  @user = User.where({ :username => params.fetch("path_id") }).first
+  if @user == nil 
+    redirect_to("/404")
+  end
+
+  @photo_list = Photo.where({ :owner_id => @user.id })
   render({ :template => "templates/user_detail.html.erb"})
-end
+  end
 
 end
