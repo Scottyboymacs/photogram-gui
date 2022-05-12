@@ -1,7 +1,7 @@
 class PhotoController < ActionController::Base
 
   def photo_index
-    @all_photos = Photo.all
+    @all_photos = Photo.all.order({:created_at => :desc})
     @photographers = User.all
     render({ :template => "templates/photo_index.html.erb"})
   end
@@ -9,9 +9,15 @@ class PhotoController < ActionController::Base
   def photo_detail 
     @photo = Photo.where(:id => params.fetch("path_id")).first
     @photographers = User.all
-    @comments = Comment.where(:photo_id => @photo.id).order({:created_at => :asc})
+    @comments = Comment.where(:photo_id => @photo.id).order({:created_at => :desc})
 
     render({ :template => "templates/photo_detail.html.erb"})
+  end
+
+  def delete_photo
+    @deletee = Photo.where(:id => params.fetch("deletee_id")).first.destroy
+    #render({ :template => "templates/photo_delete.html.erb"})
+    redirect_to("/photos")
   end
 
   def user_index
