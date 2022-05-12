@@ -21,18 +21,17 @@ class PhotoController < ActionController::Base
   end
 
   def add_photo
-  image = params.fetch("added_photo"))
-  caption = params.fetch("photo_caption")
-  owner_id = params,fetch("owner_id")
+  image = params.fetch("image")
+  caption = params.fetch("caption")
+  owner_id = params.fetch("owner_id")
 
   new_photo = Photo.new
-  
+
   new_photo.image = image
   new_photo.caption = caption
   new_photo.owner_id = owner_id
 
   new_photo.save
-
   render({ :template => "templates/add_photo.html.erb"})
   end
 
