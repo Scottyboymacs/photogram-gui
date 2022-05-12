@@ -7,6 +7,10 @@ class PhotoController < ActionController::Base
   end
 
   def photo_detail 
+    @photo = Photo.where(:id => params.fetch("path_id")).first
+    @photographers = User.all
+    @comments = Comment.where(:photo_id => @photo.id).order({:created_at => :asc})
+
     render({ :template => "templates/photo_detail.html.erb"})
   end
 
