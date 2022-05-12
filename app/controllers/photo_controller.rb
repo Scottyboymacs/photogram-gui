@@ -1,6 +1,8 @@
 class PhotoController < ActionController::Base
 
   def photo_index
+    @all_photos = Photo.all
+    @photographers = User.all
     render({ :template => "templates/photo_index.html.erb"})
   end
 
