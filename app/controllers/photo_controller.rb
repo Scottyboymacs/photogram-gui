@@ -32,14 +32,66 @@ class PhotoController < ActionController::Base
   new_photo.owner_id = owner_id
 
   new_photo.save
-  render({ :template => "templates/add_photo.html.erb"})
+  #render({ :template => "templates/add_photo.html.erb"})
+  redirect_to("/photos/#{new_photo.id}")
+  end
+
+  def update_photo
+    photo_id = params.fetch("modified_photo")
+    image = params.fetch("input_image")
+    caption = params.fetch("input_caption")
+    the_photo = Photo.where({:id => photo_id}).first
+    the_photo.image = image
+    the_photo.caption = caption
+    the_photo.save
+    redirect_to("/photos/#{photo_id}")
+  end
+
+  def add_comment
+
+    photo_id = params.fetch("photo_id")
+    body = params.fetch("input_body")
+    author = params.fetch("input_author")
+    photo = Photo.where({:id => photo_id}).first
+    
+    new_comment = Comment.new
+    new_comment.photo_id = photo_id
+    new_comment.body = body
+    new_comment.author_id = author
+    new_comment.save
+    redirect_to("/photos/#{photo_id}")
   end
 
   def user_index
     @list_of_users = User.all.order({:username => :asc})
     render({ :template => "templates/home.html.erb"})
   end  
+
+  def add_user
+    username = params.fetch("new_username")
   
+    new_user = User.new
+  
+    new_user.username = username
+ 
+    new_user.save
+    redirect_to("/users/#{username}")
+    #render({ :template => "templates/new_user.html.erb"})
+  end
+
+  def update_user
+    old_username = params.fetch("username")
+    new_username = params.fetch("input_username")
+  
+    updated_user = User.where({:username => old_username}).first
+  
+    updated_user.username = new_username
+ 
+    updated_user.save
+    redirect_to("/users/#{new_username}")
+  end
+
+
   def user_detail
   @user = User.where({ :username => params.fetch("path_id") }).first
   if @user == nil 
